@@ -5,6 +5,7 @@ using System.Globalization;
 using ImageIO;
 using FFImageLoading.Work;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using FFImageLoading.Extensions;
 using FFImageLoading.Config;
@@ -49,13 +50,13 @@ namespace FFImageLoading.Decoders
 
 			using (var nsdata = NSData.FromStream(stream))
 			{
-				var result = await SourceRegfToDecodedImageAsync(nsdata, new CGSize(downsampleWidth, downsampleHeight), new nfloat(parameters.Scale),
+				var result = await SourceRegfToDecodedImageAsync(nsdata, new CGSize(downsampleWidth, downsampleHeight), new NFloat(parameters.Scale),
 													  ImageService, parameters, RCTResizeMode.ScaleAspectFill, imageInformation, allowUpscale).ConfigureAwait(false);
 				return result;
 			}
 		}
 
-		public static async Task<IDecodedImage<PImage>> SourceRegfToDecodedImageAsync(NSData nsdata, CGSize destSize, nfloat destScale, IImageService<PImage> imageService, TaskParameter parameters, RCTResizeMode resizeMode = RCTResizeMode.ScaleAspectFit, ImageInformation imageinformation = null, bool allowUpscale = false)
+		public static async Task<IDecodedImage<PImage>> SourceRegfToDecodedImageAsync(NSData nsdata, CGSize destSize, NFloat destScale, IImageService<PImage> imageService, TaskParameter parameters, RCTResizeMode resizeMode = RCTResizeMode.ScaleAspectFit, ImageInformation imageinformation = null, bool allowUpscale = false)
 		{
 			using (var sourceRef = CGImageSource.FromData(nsdata))
 			{
@@ -82,7 +83,7 @@ namespace FFImageLoading.Decoders
 				}
 				else if (destScale <= 0)
 				{
-					destScale = new nfloat(parameters.Scale);
+					destScale = new NFloat(parameters.Scale);
 				}
 
 				// Calculate target size
@@ -250,7 +251,7 @@ namespace FFImageLoading.Decoders
 			return retval;
 		}
 
-		private static CGSize RCTTargetSize(CGSize sourceSize, nfloat sourceScale, CGSize destSize, nfloat destScale, RCTResizeMode resizeMode, bool allowUpscaling)
+		private static CGSize RCTTargetSize(CGSize sourceSize, NFloat sourceScale, CGSize destSize, NFloat destScale, RCTResizeMode resizeMode, bool allowUpscaling)
 		{
 			switch (resizeMode)
 			{
@@ -259,8 +260,8 @@ namespace FFImageLoading.Decoders
 					if (!allowUpscaling)
 					{
 						var scale = sourceScale / destScale;
-						destSize.Width = (nfloat)Math.Min(sourceSize.Width * scale, destSize.Width);
-						destSize.Height = (nfloat)Math.Min(sourceSize.Height * scale, destSize.Height);
+						destSize.Width = (NFloat)Math.Min(sourceSize.Width * scale, destSize.Width);
+						destSize.Height = (NFloat)Math.Min(sourceSize.Height * scale, destSize.Height);
 					}
 					return RCTCeilSize(destSize, destScale);
 
@@ -280,12 +281,12 @@ namespace FFImageLoading.Decoders
 			}
 		}
 
-		private static CGSize RCTSizeInPixels(CGSize pointSize, nfloat scale) => new CGSize(Math.Ceiling(pointSize.Width * scale), Math.Ceiling(pointSize.Height * scale));
-		private static CGSize RCTCeilSize(CGSize size, nfloat scale) => new CGSize(RCTCeilValue(size.Width, scale), RCTCeilValue(size.Height, scale));
-		private static nfloat RCTCeilValue(nfloat value, nfloat scale) => (nfloat)Math.Ceiling(value * scale) / scale;
-		private static nfloat RCTFloorValue(nfloat value, nfloat scale) => (nfloat)Math.Floor(value * scale) / scale;
+		private static CGSize RCTSizeInPixels(CGSize pointSize, NFloat scale) => new CGSize(Math.Ceiling(pointSize.Width * scale), Math.Ceiling(pointSize.Height * scale));
+		private static CGSize RCTCeilSize(CGSize size, NFloat scale) => new CGSize(RCTCeilValue(size.Width, scale), RCTCeilValue(size.Height, scale));
+		private static NFloat RCTCeilValue(NFloat value, NFloat scale) => (NFloat)Math.Ceiling(value * scale) / scale;
+		private static NFloat RCTFloorValue(NFloat value, NFloat scale) => (NFloat)Math.Floor(value * scale) / scale;
 
-		private static CGRect RCTTargetRect(CGSize sourceSize, CGSize destSize, nfloat destScale, RCTResizeMode resizeMode)
+		private static CGRect RCTTargetRect(CGSize sourceSize, CGSize destSize, NFloat destScale, RCTResizeMode resizeMode)
 		{
 			if (destSize.IsEmpty)
 			{
@@ -307,7 +308,7 @@ namespace FFImageLoading.Decoders
 			}
 
 			// Calculate target aspect ratio if needed (don't bother if resizeMode == scale to fill)
-			nfloat targetAspect = 0.0f;
+			NFloat targetAspect = 0.0f;
 			if (resizeMode != RCTResizeMode.ScaleToFill)
 			{
 				targetAspect = destSize.Width / destSize.Height;
@@ -394,7 +395,7 @@ namespace FFImageLoading.Decoders
          * For example, suppose the GIF contains three frames.  Frame 0 has duration 3.  Frame 1 has duration 9.  Frame 2 has duration 15.  I divide each duration by the greatest common denominator of all the durations,
          * which is 3, and add each frame the resulting number of times.  Thus `animation` will contain frame 0 3/3 = 1 time, then frame 1 9/3 = 3 times, then frame 2 15/3 = 5 times.
          * I set `animation.duration` to (3+9+15)/100 = 0.27 seconds. */
-		static PImage[] AdjustFramesToSpoofDurations(CGImage[] images, nfloat scale, List<int> delays, int totalDuration)
+		static PImage[] AdjustFramesToSpoofDurations(CGImage[] images, NFloat scale, List<int> delays, int totalDuration)
 		{
 			var count = images.Length;
 			var gcd = GetGCD(delays);

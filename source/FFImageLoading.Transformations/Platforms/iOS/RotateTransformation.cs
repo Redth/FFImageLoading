@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using UIKit;
 using CoreGraphics;
 using Foundation;
@@ -60,9 +61,9 @@ namespace FFImageLoading.Transformations
             {
                 using (var context = UIGraphics.GetCurrentContext())
                 {
-                    context.TranslateCTM((nfloat)(boundingRect.Size.Width / 2.0), (nfloat)(boundingRect.Size.Height / 2.0));
-                    context.RotateCTM((nfloat)DegreesToRadians(degrees));
-                    context.ScaleCTM((nfloat)1.0, (nfloat)(-1.0));
+                    context.TranslateCTM((NFloat)(boundingRect.Size.Width / 2.0), (NFloat)(boundingRect.Size.Height / 2.0));
+                    context.RotateCTM((NFloat)DegreesToRadians(degrees));
+                    context.ScaleCTM((NFloat)1.0, (NFloat)(-1.0));
 
                     var newRect = new CGRect(-source.Size.Width / 2, -source.Size.Height / 2, source.Size.Width, source.Size.Height);
                     context.DrawImage(newRect, source.CGImage);
