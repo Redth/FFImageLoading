@@ -69,16 +69,24 @@ namespace FFImageLoading.Maui
 
 		internal IMauiContext FindMauiContext()
 		{
-			if (Handler?.MauiContext != null)
-				return Handler.MauiContext;
+			try
+			{
+				if (Handler?.MauiContext != null)
+					return Handler.MauiContext;
 
-			if (Window?.Handler?.MauiContext is not null)
-				return Window.Handler.MauiContext;
+				if (Window?.Handler?.MauiContext is not null)
+					return Window.Handler.MauiContext;
 
-			if (Application.Current?.Handler?.MauiContext is not null)
-				return Application.Current.Handler.MauiContext;
+				if (Application.Current?.Handler?.MauiContext is not null)
+					return Application.Current.Handler.MauiContext;
 
-			return null;
+				return null;
+			}
+			catch(Exception ex)
+			{
+				Console.WriteLine(ex.ToString());
+				return null;
+			}
 		}
 
 		protected override void OnHandlerChanged()
@@ -841,6 +849,8 @@ namespace FFImageLoading.Maui
 		/// <param name="errorPlaceholderSource">Error placeholder source.</param>
 		protected internal virtual void SetupOnBeforeImageLoading(out Work.TaskParameter imageLoader, IImageSourceBinding source, IImageSourceBinding loadingPlaceholderSource, IImageSourceBinding errorPlaceholderSource)
 		{
+			ImageService ??= this.FindMauiContext()?.Services?.GetRequiredService<IImageService<TImageContainer>>();
+
 			if (source.ImageSource == Work.ImageSource.Url)
 			{
 				imageLoader = ImageService.LoadUrl(source.Path, CacheDuration);
