@@ -599,6 +599,9 @@ namespace FFImageLoading.Maui
 		/// (downsampling and transformations variants)</param>
 		public async Task InvalidateCache(ImageSource source, Cache.CacheType cacheType, bool removeSimilar = false)
 		{
+			if (ImageService is null)
+				return;
+
 			if (source is FileImageSource fileImageSource)
 				await ImageService.InvalidateCacheEntryAsync(fileImageSource.File, cacheType, removeSimilar).ConfigureAwait(false);
 
@@ -841,6 +844,12 @@ namespace FFImageLoading.Maui
 		/// <param name="errorPlaceholderSource">Error placeholder source.</param>
 		protected internal virtual void SetupOnBeforeImageLoading(out Work.TaskParameter imageLoader, IImageSourceBinding source, IImageSourceBinding loadingPlaceholderSource, IImageSourceBinding errorPlaceholderSource)
 		{
+			if (ImageService is null)
+			{
+				imageLoader = null;
+				return;
+			}
+
 			if (source.ImageSource == Work.ImageSource.Url)
 			{
 				imageLoader = ImageService.LoadUrl(source.Path, CacheDuration);
