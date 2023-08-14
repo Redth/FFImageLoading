@@ -86,6 +86,8 @@ namespace FFImageLoading.Maui
 			base.OnHandlerChanged();
 
 			ImageService = this.FindMauiContext().Services.GetRequiredService<IImageService<TImageContainer>>();
+
+			ReloadImage();
 		}
 
 		/// <summary>
