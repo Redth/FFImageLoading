@@ -42,6 +42,51 @@ namespace FFImageLoading.Config
 			InvalidateLayout = true;
 		}
 
+		public void CopyFrom(IConfiguration config)
+		{
+			if (config == null)
+				return;
+
+			BitmapOptimizations = config.BitmapOptimizations;
+			FadeAnimationEnabled = config.FadeAnimationEnabled;
+			FadeAnimationForCachedImages = config.FadeAnimationForCachedImages;
+			FadeAnimationDuration = config.FadeAnimationDuration;
+			TransformPlaceholders = config.TransformPlaceholders;
+			DownsampleInterpolationMode = config.DownsampleInterpolationMode;
+			HttpHeadersTimeout = config.HttpHeadersTimeout;
+			HttpReadTimeout = config.HttpReadTimeout;
+			HttpReadBufferSize = config.HttpReadBufferSize;
+			VerbosePerformanceLogging = config.VerboseMemoryCacheLogging;
+			VerboseMemoryCacheLogging = config.VerboseMemoryCacheLogging;
+			VerboseLoadingCancelledLogging = config.VerboseLoadingCancelledLogging;
+			VerboseLogging = config.VerboseLogging;
+			DecodingMaxParallelTasks = config.DecodingMaxParallelTasks;
+			SchedulerMaxParallelTasks = config.SchedulerMaxParallelTasks;
+			DiskCacheDuration = config.DiskCacheDuration;
+			TryToReadDiskCacheDurationFromHttpHeaders = config.TryToReadDiskCacheDurationFromHttpHeaders;
+			ExecuteCallbacksOnUIThread = config.ExecuteCallbacksOnUIThread;
+			StreamChecksumsAsKeys = config.StreamChecksumsAsKeys;
+			AnimateGifs = config.AnimateGifs;
+			DelayInMs = config.DelayInMs;
+			ClearMemoryCacheOnOutOfMemory = config.ClearMemoryCacheOnOutOfMemory;
+			InvalidateLayout = config.InvalidateLayout;
+
+
+			this.HttpClient = config?.HttpClient ?? this.HttpClient;
+			if (this.HttpReadTimeout > 0)
+			{
+				try
+				{
+					this.HttpClient.Timeout = TimeSpan.FromSeconds(this.HttpReadTimeout);
+				}
+				catch (Exception)
+				{
+				}
+			}
+
+			config.HttpClient = this.HttpClient;
+		}
+
 		/// <summary>
 		/// Gets or sets the http client used for web requests.
 		/// </summary>

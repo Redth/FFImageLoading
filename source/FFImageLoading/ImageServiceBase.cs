@@ -102,8 +102,7 @@ namespace FFImageLoading
                 {
                     // Redefine these if they were provided only
                     configuration.HttpClient = configuration.HttpClient ?? _config.HttpClient;
-                    configuration.SchedulerMaxParallelTasksFactory = configuration.SchedulerMaxParallelTasksFactory ?? _config.SchedulerMaxParallelTasksFactory;
-                    
+                    configuration.SchedulerMaxParallelTasksFactory = configuration.SchedulerMaxParallelTasksFactory ?? _config.SchedulerMaxParallelTasksFactory;                    
                     configuration.MaxMemoryCacheSize = _config.MaxMemoryCacheSize;
                 }
 
@@ -123,32 +122,16 @@ namespace FFImageLoading
 
                 _isInitializing = true;
 
-                if (userDefinedConfig == null)
+                if (userDefinedConfig != null)
                 {
-                    userDefinedConfig = new Configuration();
                     PlatformSpecificConfiguration(userDefinedConfig);
                 }
 
-                _config = userDefinedConfig;
+				_config.CopyFrom(userDefinedConfig);
 
-                var httpClient = userDefinedConfig.HttpClient ?? new HttpClient(new HttpClientHandler() { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate });
-                if (userDefinedConfig.HttpReadTimeout > 0)
-                {
-                    try
-                    {
-                        httpClient.Timeout = TimeSpan.FromSeconds(userDefinedConfig.HttpReadTimeout);
-                    }
-                    catch (Exception)
-                    {
-                    }
-                }
-                
-				if (StaticLocks.DecodingLock == null)
-					StaticLocks.DecodingLock = new SemaphoreSlim(userDefinedConfig.DecodingMaxParallelTasks, userDefinedConfig.DecodingMaxParallelTasks);
+				StaticLocks.DecodingLock = new SemaphoreSlim(_config.DecodingMaxParallelTasks, _config.DecodingMaxParallelTasks);
 
-                userDefinedConfig.HttpClient = httpClient;
-
-                _initialized = true;
+				_initialized = true;
                 _isInitializing = false;
             }
         }

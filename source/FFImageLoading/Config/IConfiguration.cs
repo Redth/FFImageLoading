@@ -6,6 +6,8 @@ namespace FFImageLoading.Config
 {
 	public interface IConfiguration
 	{
+		void CopyFrom(IConfiguration config);
+
 		bool AllowUpscale { get; set; }
 		bool AnimateGifs { get; set; }
 		bool BitmapOptimizations { get; set; }
@@ -33,6 +35,6 @@ namespace FFImageLoading.Config
 		bool VerboseLoadingCancelledLogging { get; set; }
 		bool VerboseLogging { get; set; }
 		bool VerboseMemoryCacheLogging { get; set; }
-		bool VerbosePerformanceLogging { get; set; }
+		bool VerbosePerformanceLogging { get; set; }		
 	}
 }
