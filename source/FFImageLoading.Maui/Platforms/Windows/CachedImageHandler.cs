@@ -23,7 +23,6 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.Maui;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Handlers;
-using Microsoft.Graphics.Display;
 using Microsoft.Maui.Platform;
 
 namespace FFImageLoading.Maui.Platform
@@ -212,7 +211,7 @@ namespace FFImageLoading.Maui.Platform
 			{
 				if (element == null || _isDisposed)
 					return;
-				
+
 				// Wonky situation where you need the parent to remeasure to affect the actual image control
 				(PlatformView?.Parent as FrameworkElement)?.InvalidateMeasure();
 

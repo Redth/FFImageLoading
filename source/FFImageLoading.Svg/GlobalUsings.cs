@@ -4,9 +4,9 @@ global using TImageContainer = FFImageLoading.Drawables.SelfDisposingBitmapDrawa
 #elif IOS || MACCATALYST
 global using TImageContainer = UIKit.UIImage;
 #elif TIZEN
-global using TImageContainer = object;
+global using TImageContainer = System.Object;
 #elif WINDOWS
 global using TImageContainer = Microsoft.UI.Xaml.Media.Imaging.BitmapSource;
 #else
-global using TImageContainer = object;
+global using TImageContainer = System.Object;
 #endif

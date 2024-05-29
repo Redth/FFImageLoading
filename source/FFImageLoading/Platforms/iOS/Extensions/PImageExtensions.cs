@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using CoreGraphics;
 using FFImageLoading.Work;
 
@@ -46,7 +47,7 @@ namespace FFImageLoading.Extensions
 
             try
             {
-                image.Draw(new CGRect((nfloat)0.0, (nfloat)0.0, newSize.Width, newSize.Height));
+                image.Draw(new CGRect((NFloat)0.0, (NFloat)0.0, newSize.Width, newSize.Height));
 
                 using (var context = UIGraphics.GetCurrentContext())
                 {

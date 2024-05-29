@@ -11,6 +11,7 @@ using FFImageLoading.Helpers;
 using FFImageLoading.Maui.Args;
 using FFImageLoading.Maui.Platform;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using Microsoft.Maui.Handlers;
 
 #if __IOS__
@@ -276,7 +277,7 @@ namespace FFImageLoading.Maui.Platform
 
 #if __IOS__
 
-            var imageData = usePNG ? image.AsPNG() : image.AsJPEG((nfloat)quality / 100f);
+            var imageData = usePNG ? image.AsPNG() : image.AsJPEG((NFloat)quality / 100f);
 
             if (imageData == null || imageData.Length == 0)
                 return null;

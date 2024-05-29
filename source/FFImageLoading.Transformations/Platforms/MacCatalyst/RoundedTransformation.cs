@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using UIKit;
 using CoreGraphics;
 using Foundation;
@@ -49,7 +50,7 @@ namespace FFImageLoading.Transformations
             return ToRounded(sourceBitmap, (nfloat)Radius, CropWidthRatio, CropHeightRatio, BorderSize, BorderHexColor);
         }
 
-        public static UIImage ToRounded(UIImage source, nfloat rad, double cropWidthRatio, double cropHeightRatio, double borderSize, string borderHexColor)
+        public static UIImage ToRounded(UIImage source, NFloat rad, double cropWidthRatio, double cropHeightRatio, double borderSize, string borderHexColor)
         {
             double sourceWidth = source.Size.Width;
             double sourceHeight = source.Size.Height;
@@ -69,11 +70,11 @@ namespace FFImageLoading.Transformations
             float cropY = (float)((sourceHeight - desiredHeight) / 2);
 
             if (rad == 0)
-                rad = (nfloat)(Math.Min(desiredWidth, desiredHeight) / 2);
+                rad = (NFloat)(Math.Min(desiredWidth, desiredHeight) / 2);
             else
-                rad = (nfloat)(rad * (desiredWidth + desiredHeight) / 2 / 500);
+                rad = (NFloat)(rad * (desiredWidth + desiredHeight) / 2 / 500);
 
-            UIGraphics.BeginImageContextWithOptions(new CGSize(desiredWidth, desiredHeight), false, (nfloat)0.0);
+            UIGraphics.BeginImageContextWithOptions(new CGSize(desiredWidth, desiredHeight), false, (NFloat)0.0);
 
             try
             {
@@ -103,7 +104,7 @@ namespace FFImageLoading.Transformations
                         using (var path = UIBezierPath.FromRoundedRect(borderRect, rad))
                         {
                             context.SetStrokeColor(borderHexColor.ToUIColor().CGColor);
-                            context.SetLineWidth((nfloat)borderSize);
+                            context.SetLineWidth((NFloat)borderSize);
                             context.AddPath(path.CGPath);
                             context.StrokePath();
                         }
